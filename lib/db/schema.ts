@@ -14,6 +14,22 @@ export const games = sqliteTable("games", {
   /** UTC ISO timestamp of first pitch (used for ordering / past-game checks) */
   startsAt: text("starts_at").notNull(),
   opponent: text("opponent").notNull(),
+  // Extra color from the MLB API. Nullable so a DB seeded before these existed still works.
+  /** MLB team id, e.g. 119 (Dodgers) — used for logo URLs */
+  opponentTeamId: integer("opponent_team_id"),
+  /** "LAD" */
+  opponentAbbrev: text("opponent_abbrev"),
+  /** "Dodgers" */
+  opponentClub: text("opponent_club"),
+  /** "National League West" */
+  opponentDivision: text("opponent_division"),
+  /** 2 (of gamesInSeries) */
+  seriesGame: integer("series_game"),
+  seriesLength: integer("series_length"),
+  /** "day" | "night" */
+  dayNight: text("day_night"),
+  /** MLB's note for special games, e.g. "Giants home opener" */
+  description: text("description"),
   status: text("status", { enum: GAME_STATUSES }).notNull().default("hidden"),
   /** Whole dollars for the whole set of seats; null = free / ask */
   price: integer("price"),

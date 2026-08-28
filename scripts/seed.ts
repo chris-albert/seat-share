@@ -5,13 +5,21 @@
  *   npm run seed -- 2027    # a specific season
  *
  * Safe to re-run: existing games keep their status/price/claims; only
- * date/time/opponent are refreshed (handles rescheduled games).
+ * schedule details (date/time/opponent/series info) are refreshed.
  */
 import "dotenv/config";
 import { db, games } from "../lib/db";
 
 const GIANTS_TEAM_ID = 137;
 const season = process.argv[2] ?? String(new Date().getFullYear());
+
+type MlbTeam = {
+  id: number;
+  name: string;
+  abbreviation?: string;
+  clubName?: string;
+  division?: { name: string };
+};
 
 type MlbSchedule = {
   dates: {
@@ -20,9 +28,13 @@ type MlbSchedule = {
       gameDate: string; // UTC ISO
       officialDate: string; // YYYY-MM-DD local
       status: { startTimeTBD?: boolean };
+      description?: string;
+      seriesGameNumber?: number;
+      gamesInSeries?: number;
+      dayNight?: string;
       teams: {
-        home: { team: { id: number; name: string } };
-        away: { team: { id: number; name: string } };
+        home: { team: MlbTeam };
+        away: { team: MlbTeam };
       };
     }[];
   }[];
@@ -40,6 +52,7 @@ async function main() {
   url.searchParams.set("teamId", String(GIANTS_TEAM_ID));
   url.searchParams.set("season", season);
   url.searchParams.set("gameType", "R"); // regular season only
+  url.searchParams.set("hydrate", "team"); // abbreviation, club name, division
 
   const res = await fetch(url);
   if (!res.ok) throw new Error(`MLB API ${res.status}: ${await res.text()}`);
@@ -55,20 +68,26 @@ async function main() {
   }
 
   for (const g of home) {
-    const row = {
+    const away = g.teams.away.team;
+    const { mlbGamePk, ...details } = {
       mlbGamePk: g.gamePk,
       date: g.officialDate,
       time: g.status.startTimeTBD ? "TBD" : timeFmt.format(new Date(g.gameDate)),
       startsAt: g.gameDate,
-      opponent: g.teams.away.team.name,
+      opponent: away.name,
+      opponentTeamId: away.id,
+      opponentAbbrev: away.abbreviation ?? null,
+      opponentClub: away.clubName ?? null,
+      opponentDivision: away.division?.name ?? null,
+      seriesGame: g.seriesGameNumber ?? null,
+      seriesLength: g.gamesInSeries ?? null,
+      dayNight: g.dayNight ?? null,
+      description: g.description ?? null,
     };
     await db
       .insert(games)
-      .values(row)
-      .onConflictDoUpdate({
-        target: games.mlbGamePk,
-        set: { date: row.date, time: row.time, startsAt: row.startsAt, opponent: row.opponent },
-      });
+      .values({ mlbGamePk, ...details })
+      .onConflictDoUpdate({ target: games.mlbGamePk, set: details });
   }
 
   console.log(`Seeded ${home.length} Giants home games for ${season}.`);
