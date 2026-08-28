@@ -1,5 +1,8 @@
-import "dotenv/config";
+import { config } from "dotenv";
 import { defineConfig } from "drizzle-kit";
+
+// Next.js reads .env.local; make the CLI scripts see the same file.
+config({ path: [".env.local", ".env"], quiet: true });
 
 export default defineConfig({
   schema: "./lib/db/schema.ts",

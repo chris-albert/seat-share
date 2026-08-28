@@ -7,7 +7,10 @@
  * Safe to re-run: existing games keep their status/price/claims; only
  * schedule details (date/time/opponent/series info) are refreshed.
  */
-import "dotenv/config";
+import { config } from "dotenv";
+
+config({ path: [".env.local", ".env"], quiet: true });
+
 import { db, games } from "../lib/db";
 
 const GIANTS_TEAM_ID = 137;
