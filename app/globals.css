@@ -1,9 +1,100 @@
 @import "tailwindcss";
 
+/* Dark mode is driven by a `.dark` class on <html> (set by the theme script + toggle). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  color-scheme: light;
+  --bg: #f6f5f2;
+  --surface: #ffffff;
+  --raised: #f1f0ec;
+  --line: #e6e4df;
+  --fg: #18181b;
+  --muted: #71717a;
+  --accent: #f4581e;
+  --accent-hover: #dc4a14;
+  --accent-fg: #ffffff;
+  --accent-soft: #fdeee7;
+  --ok: #047857;
+  --ok-bg: #ecfdf5;
+  --warn: #b45309;
+  --warn-bg: #fffbeb;
+  --danger: #dc2626;
+}
+
+.dark {
+  color-scheme: dark;
+  --bg: #0b0b0d;
+  --surface: #141416;
+  --raised: #1d1d21;
+  --line: #27272c;
+  --fg: #f4f4f5;
+  --muted: #8b8b94;
+  --accent: #ff6a2f;
+  --accent-hover: #ff7f4d;
+  --accent-fg: #14100e;
+  --accent-soft: #2a1a12;
+  --ok: #34d399;
+  --ok-bg: #0a2a1f;
+  --warn: #fbbf24;
+  --warn-bg: #2a2010;
+  --danger: #f87171;
+}
+
 @theme inline {
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-raised: var(--raised);
+  --color-line: var(--line);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-soft: var(--accent-soft);
+  --color-ok: var(--ok);
+  --color-ok-bg: var(--ok-bg);
+  --color-warn: var(--warn);
+  --color-warn-bg: var(--warn-bg);
+  --color-danger: var(--danger);
 }
 
 body {
   font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--fg);
+}
+
+@layer components {
+  .card {
+    @apply rounded-2xl border border-line bg-surface shadow-sm dark:shadow-none;
+  }
+  .btn,
+  .btn-primary,
+  .btn-secondary,
+  .btn-ghost {
+    @apply inline-flex items-center justify-center rounded-lg px-3.5 py-2 text-sm font-medium transition-colors
+      disabled:cursor-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent;
+  }
+  .btn-primary {
+    @apply bg-accent text-accent-fg shadow-sm hover:bg-accent-hover;
+  }
+  .btn-secondary {
+    @apply border border-line bg-surface text-fg hover:bg-raised;
+  }
+  .btn-ghost {
+    @apply text-muted hover:bg-raised hover:text-fg;
+  }
+  .input {
+    @apply rounded-lg border border-line bg-surface px-3 py-2 text-fg placeholder:text-muted
+      focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30;
+  }
+  .pill {
+    @apply inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium;
+  }
+  .section-title {
+    @apply mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-muted;
+  }
 }

@@ -1,6 +1,6 @@
 import type { Game } from "./db/schema";
 
-const dayFmt = new Intl.DateTimeFormat("en-US", {
+const partsFmt = new Intl.DateTimeFormat("en-US", {
   timeZone: "America/Los_Angeles",
   weekday: "short",
   month: "short",
@@ -13,9 +13,11 @@ const monthFmt = new Intl.DateTimeFormat("en-US", {
   year: "numeric",
 });
 
-/** "Sat, Jul 12" */
-export function formatDay(game: Game): string {
-  return dayFmt.format(new Date(game.startsAt));
+/** { weekday: "Sat", month: "Jul", day: "12" } — for the calendar-tile date block. */
+export function formatDateParts(game: Game): { weekday: string; month: string; day: string } {
+  const get = (type: Intl.DateTimeFormatPartTypes) =>
+    partsFmt.formatToParts(new Date(game.startsAt)).find((p) => p.type === type)?.value ?? "";
+  return { weekday: get("weekday"), month: get("month"), day: get("day") };
 }
 
 /** "July 2026" */
