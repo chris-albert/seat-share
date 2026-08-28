@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
+import { AdminNav } from "@/components/admin-nav";
 import { logout } from "@/lib/actions";
 import { isAdmin } from "@/lib/auth";
 
@@ -8,13 +8,12 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <div className="mx-auto w-full max-w-4xl p-4 sm:p-8">
-      <nav className="mb-6 flex items-center gap-4 text-sm">
-        <Link href="/admin" className="font-semibold">Games</Link>
-        <Link href="/admin/friends" className="font-semibold">Friends</Link>
+      <div className="mb-6 flex items-center gap-4">
+        <AdminNav />
         <form action={logout} className="ml-auto">
-          <button className="text-zinc-500 hover:text-zinc-900">Sign out</button>
+          <button className="btn-ghost">Sign out</button>
         </form>
-      </nav>
+      </div>
       {children}
     </div>
   );
