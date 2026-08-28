@@ -42,7 +42,11 @@ Vercel's filesystem is read-only/ephemeral, so the SQLite file has to live somew
 ### 1. Create the Turso database
 
 ```bash
-# install the CLI (macOS)
+# install the CLI (macOS). Homebrew 6+ requires trusting third-party taps first,
+# and the turso formula depends on sqld from a second tap.
+brew tap libsql/sqld
+brew trust tursodatabase/tap
+brew trust libsql/sqld
 brew install tursodatabase/tap/turso
 turso auth signup            # or: turso auth login
 
