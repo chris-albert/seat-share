@@ -31,7 +31,7 @@ npm run dev
 | Command | What it does |
 |---|---|
 | `npm run db:push` | Create/update tables to match `lib/db/schema.ts` (works against local file or Turso, based on `.env.local`) |
-| `npm run seed` | Import this year's Giants home schedule from MLB's public Stats API. Safe to re-run; refreshes dates/times without touching your statuses, prices, or claims. |
+| `npm run seed` | Import this year's Giants home schedule from MLB's public Stats API, including opponent logos, series info, and special-game notes. Safe to re-run; refreshes schedule details without touching your statuses, prices, or claims. |
 | `npm run seed -- 2027` | Import a specific season (run this when next year's schedule is released) |
 | `npm run setup` | `db:push` + `seed` |
 

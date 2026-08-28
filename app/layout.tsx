@@ -21,8 +21,9 @@ export const viewport: Viewport = {
   ],
 };
 
-// Runs before first paint so a saved dark preference never flashes light.
-const themeScript = `try{var t=localStorage.getItem("theme");if(t==="dark"||(!t&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark")}catch(e){}`;
+// Runs before first paint so a saved dark preference never flashes light, and the
+// saved list/calendar view doesn't flash the wrong one.
+const themeScript = `try{var t=localStorage.getItem("theme");if(t==="dark"||(!t&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark");var v=localStorage.getItem("view");if(v)document.documentElement.dataset.view=v}catch(e){}`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
