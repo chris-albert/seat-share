@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { DateTile } from "@/components/date-tile";
 import { GameCalendar, type CellTone } from "@/components/game-calendar";
 import { GameTags, GameTime } from "@/components/game-tags";
+import { SubmitButton } from "@/components/submit-button";
 import { TeamLogo } from "@/components/team-logo";
 import { ViewToggle } from "@/components/view-toggle";
 import { claimGame, releaseGame } from "@/lib/actions";
@@ -123,14 +124,14 @@ function GameActions({ row, token, friendId }: { row: GameRow; token: string; fr
   if (game.status === "available" && !claim) {
     return (
       <form action={claimGame.bind(null, token, game.id)}>
-        <button className="btn-primary">I&apos;ll take it</button>
+        <SubmitButton className="btn-primary">I&apos;ll take it</SubmitButton>
       </form>
     );
   }
   if (claim?.friendId === friendId) {
     return (
       <form action={releaseGame.bind(null, token, game.id)}>
-        <button className="btn-secondary">Release</button>
+        <SubmitButton className="btn-secondary">Release</SubmitButton>
       </form>
     );
   }

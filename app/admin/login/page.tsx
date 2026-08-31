@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { SubmitButton } from "@/components/submit-button";
 import { login } from "@/lib/actions";
 import { isAdmin } from "@/lib/auth";
 
@@ -23,7 +24,7 @@ export default async function LoginPage({ searchParams }: PageProps<"/admin/logi
           autoFocus
           className="input w-full"
         />
-        <button className="btn-primary w-full">Sign in</button>
+        <SubmitButton className="btn-primary w-full">Sign in</SubmitButton>
       </form>
     </main>
   );

@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { DateTile } from "@/components/date-tile";
 import { GameCalendar, type CellTone } from "@/components/game-calendar";
 import { GameTags, GameTime } from "@/components/game-tags";
+import { SubmitButton } from "@/components/submit-button";
 import { TeamLogo } from "@/components/team-logo";
 import { ViewToggle } from "@/components/view-toggle";
 import {
@@ -55,9 +56,9 @@ export default async function AdminGamesPage() {
 
       {counts.hidden > 0 && (
         <form action={offerAllHiddenUpcoming} className="mb-8">
-          <button className="btn-primary w-full sm:w-auto">
+          <SubmitButton className="btn-primary w-full sm:w-auto">
             Offer all {counts.hidden} hidden games
-          </button>
+          </SubmitButton>
         </form>
       )}
 
@@ -159,9 +160,9 @@ function AdminGameItem({ row }: { row: GameRow }) {
             <Toggle claimId={claim.id} field="paid" on={claim.paid} />
             <Toggle claimId={claim.id} field="transferred" on={claim.transferred} />
             <form action={unclaimGame.bind(null, game.id)}>
-              <button className="text-xs text-muted transition-colors hover:text-danger">
+              <SubmitButton className="text-xs text-muted transition-colors hover:text-danger">
                 unclaim
-              </button>
+              </SubmitButton>
             </form>
           </div>
         ) : (
@@ -179,7 +180,7 @@ function AdminGameItem({ row }: { row: GameRow }) {
               placeholder="free"
               className="input w-20 px-2 py-0.5 text-sm"
             />
-            <button className="text-muted transition-colors hover:text-fg">save</button>
+            <SubmitButton className="btn-secondary px-2.5 py-0.5 text-xs">Save</SubmitButton>
           </form>
         )}
       </div>
@@ -189,7 +190,7 @@ function AdminGameItem({ row }: { row: GameRow }) {
           const active = game.status === s;
           return (
             <form key={s} action={setGameStatus.bind(null, game.id, s)}>
-              <button
+              <SubmitButton
                 disabled={active}
                 className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
                   active
@@ -200,7 +201,7 @@ function AdminGameItem({ row }: { row: GameRow }) {
                 }`}
               >
                 {STATUS_LABEL[s]}
-              </button>
+              </SubmitButton>
             </form>
           );
         })}
@@ -220,13 +221,13 @@ function Toggle({
 }) {
   return (
     <form action={toggleClaimFlag.bind(null, claimId, field)}>
-      <button
+      <SubmitButton
         className={`pill transition-colors ${
           on ? "bg-ok-bg text-ok" : "bg-raised text-muted line-through hover:text-fg"
         }`}
       >
         {field}
-      </button>
+      </SubmitButton>
     </form>
   );
 }

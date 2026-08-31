@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { AdminNav } from "@/components/admin-nav";
+import { SubmitButton } from "@/components/submit-button";
 import { logout } from "@/lib/actions";
 import { isAdmin } from "@/lib/auth";
 
@@ -11,7 +12,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       <div className="mb-6 flex items-center gap-4">
         <AdminNav />
         <form action={logout} className="ml-auto">
-          <button className="btn-ghost">Sign out</button>
+          <SubmitButton className="btn-ghost">Sign out</SubmitButton>
         </form>
       </div>
       {children}
