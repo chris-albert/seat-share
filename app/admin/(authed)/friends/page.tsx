@@ -1,5 +1,6 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { SubmitButton } from "@/components/submit-button";
 import { addFriend, removeFriend } from "@/lib/actions";
 import { isAdmin } from "@/lib/auth";
 import { allFriends } from "@/lib/queries";
@@ -19,7 +20,7 @@ export default async function FriendsPage() {
     <>
       <form action={addFriend} className="mb-6 flex gap-2">
         <input name="name" placeholder="Friend's name" required className="input flex-1" />
-        <button className="btn-primary">Add</button>
+        <SubmitButton className="btn-primary">Add</SubmitButton>
       </form>
 
       {list.length === 0 ? (
@@ -44,9 +45,9 @@ export default async function FriendsPage() {
                   {link}
                 </a>
                 <form action={removeFriend.bind(null, f.id)}>
-                  <button className="text-sm text-muted transition-colors hover:text-danger">
+                  <SubmitButton className="text-sm text-muted transition-colors hover:text-danger">
                     remove
-                  </button>
+                  </SubmitButton>
                 </form>
               </li>
             );
