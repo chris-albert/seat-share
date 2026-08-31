@@ -4,7 +4,7 @@ import { randomBytes } from "node:crypto";
 import { and, eq, inArray } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { claims, db, friends, games, GAME_STATUSES, type GameStatus } from "./db";
+import { claims, db, friends, games, payments, GAME_STATUSES, type GameStatus } from "./db";
 import { clearAdminCookie, isAdmin, passwordMatches, setAdminCookie } from "./auth";
 
 // ---------- friend actions ----------
@@ -124,5 +124,21 @@ export async function addFriend(formData: FormData) {
 export async function removeFriend(friendId: number) {
   await requireAdmin();
   await db.delete(friends).where(eq(friends.id, friendId));
+  revalidateAll();
+}
+
+// ---------- admin: payments ----------
+
+export async function recordPayment(friendId: number, formData: FormData) {
+  await requireAdmin();
+  const amount = Math.round(Number(String(formData.get("amount") ?? "").trim()));
+  if (!Number.isFinite(amount) || amount <= 0) return;
+  await db.insert(payments).values({ friendId, amount });
+  revalidateAll();
+}
+
+export async function removePayment(paymentId: number) {
+  await requireAdmin();
+  await db.delete(payments).where(eq(payments.id, paymentId));
   revalidateAll();
 }
