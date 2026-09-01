@@ -1,5 +1,6 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { CopyButton } from "@/components/copy-button";
 import { SubmitButton } from "@/components/submit-button";
 import { addFriend, recordPayment, removeFriend, removePayment } from "@/lib/actions";
 import { isAdmin } from "@/lib/auth";
@@ -82,6 +83,7 @@ function FriendItem({ ledger, base }: { ledger: FriendLedger; base: string }) {
         >
           {link}
         </a>
+        <CopyButton text={link} />
         <form action={removeFriend.bind(null, friend.id)}>
           <SubmitButton className="text-sm text-muted transition-colors hover:text-danger">
             remove
