@@ -63,6 +63,19 @@ export const claims = sqliteTable("claims", {
     .default(false),
 });
 
+export const payments = sqliteTable("payments", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  friendId: integer("friend_id")
+    .notNull()
+    .references(() => friends.id, { onDelete: "cascade" }),
+  /** Whole dollars, same convention as game.price */
+  amount: integer("amount").notNull(),
+  paidAt: text("paid_at")
+    .notNull()
+    .default(sql`(datetime('now'))`),
+});
+
 export type Game = typeof games.$inferSelect;
 export type Friend = typeof friends.$inferSelect;
 export type Claim = typeof claims.$inferSelect;
+export type Payment = typeof payments.$inferSelect;
